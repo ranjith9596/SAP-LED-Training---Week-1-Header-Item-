@@ -1,0 +1,23 @@
+@Metadata.layer: #CUSTOMER
+annotate entity ZPR_BILLING_DOCUMENT_ITEM
+    with 
+{
+@UI.lineItem: [{ position: 10, label: 'Document Number' }]
+    DocumentNumber;
+@UI.lineItem: [{ position: 20, label: 'Item Number' }]    
+    Item;
+@UI.lineItem: [{ position: 20, label: 'Material' }]        
+    Material;
+@UI.lineItem: [{ position: 20, label: 'Material Desc' }]        
+    Description;
+@UI.lineItem: [{ position: 20, label: 'Quantity' }]    
+    Quantity;
+@UI.hidden: true    
+    UoM;
+@UI.lineItem: [{ position: 20, label: 'UOM' }]    
+    UoMText;
+@UI.lineItem: [{ position: 20, label: 'Net Value' }]    
+    NetValue;
+@UI.hidden: true     
+    Currency;    
+}
