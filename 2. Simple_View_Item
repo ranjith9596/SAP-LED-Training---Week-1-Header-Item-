@@ -1,0 +1,25 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Basic View for Item'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity ZIR_ITEM as select from zi_vbrp
+left outer join zi_t006a on zi_vbrp.UoM = zi_t006a.UoM and
+                            zi_t006a.Language = $session.system_language
+{
+    key zi_vbrp.DocumentNumber as DocumentNumber,
+    key zi_vbrp.Item as Item,
+    zi_vbrp.Material as Material,
+    zi_vbrp.Description as Description,
+    @Semantics.quantity.unitOfMeasure: 'UoM'
+    zi_vbrp.Quantity as Quantity,
+    zi_vbrp.UoM as UoM,
+    zi_t006a.UoMText as UoMText,
+    @Semantics.amount.currencyCode: 'Currency'
+    zi_vbrp.NetValue as NetValue,
+    zi_vbrp.Currency as Currency
+}
