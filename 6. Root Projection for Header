@@ -1,0 +1,19 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Projection view for Billing Document'
+@Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
+define root view entity ZPR_BILLING_DOCUMENT 
+provider contract transactional_query
+as projection on ZIR_BILLING_HEADER
+{
+    key DocumentNumber,
+    BillingDate,
+    @Semantics.amount.currencyCode: 'Currency'
+    NetValue,
+    Currency,
+    Payer,
+    Name,
+    Country,
+    /* Associations */
+    _Item : redirected to composition child ZPR_BILLING_DOCUMENT_ITEM
+}
