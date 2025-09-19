@@ -1,0 +1,21 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Projection view for Billing Document'
+@Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
+define view entity ZPR_BILLING_DOCUMENT_ITEM 
+as projection on ZIR_BILLING_ITEM
+{
+key DocumentNumber,
+key Item,
+Material,
+Description,
+@Semantics.quantity.unitOfMeasure: 'UoM'
+Quantity,
+UoM,
+UoMText,
+@Semantics.amount.currencyCode: 'Currency'
+NetValue,
+Currency,
+/* Associations */
+_Header : redirected to parent ZPR_BILLING_DOCUMENT
+}
