@@ -1,3 +1,7 @@
+***************************************************
+Service Defintion againts Projection view
+***************************************************
+
 @EndUserText.label: 'Service Definition for Billing Document'
 define service ZSR_BILLING_DOCUMENT {
   expose ZPR_BILLING_DOCUMENT      as Header;
