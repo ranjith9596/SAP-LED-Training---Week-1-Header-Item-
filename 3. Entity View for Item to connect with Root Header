@@ -1,0 +1,17 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Interface view for Header'
+@Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
+define root view entity ZIR_BILLING_HEADER as select from ZIR_HEADER
+composition[1..*] of ZIR_BILLING_ITEM as _Item
+{
+    key DocumentNumber,
+    BillingDate,
+    @Semantics.amount.currencyCode: 'Currency'
+    NetValue,
+    Currency,
+    Payer,
+    Name,
+    Country,   
+    _Item // Make association public
+}
