@@ -1,0 +1,48 @@
+@Metadata.layer: #CUSTOMER
+@Search.searchable: true
+@UI.headerInfo:{ typeNamePlural: 'Billing Documents',
+                 typeName: 'Billing Details',
+                 title.value: 'DocumentNumber' }
+annotate entity ZPR_BILLING_DOCUMENT
+    with 
+{
+@UI:{ 
+    facet: [{ id: 'Header', position: 10, purpose: #STANDARD, label: 'Header Details', type: #IDENTIFICATION_REFERENCE },
+            { id: 'Item', position: 20, purpose: #STANDARD, label: 'Item Details', type: #LINEITEM_REFERENCE, targetElement: '_Item' }
+           ],
+    lineItem: [{ position: 10, label: 'Document Number' }],
+    identification: [{ position: 10, label: 'Billing Document' }],
+    selectionField: [{ position: 10 }]       
+}
+@Search.defaultSearchElement: true
+    DocumentNumber;
+    
+@UI:{ lineItem: [{ position: 20, label: 'Document Date' }],
+      identification: [{ position: 20, label: 'Billing Doc Date' }] }
+@Search.defaultSearchElement: true      
+    BillingDate;
+    
+@UI:{ lineItem: [{ position: 30, label: 'Net Value' }],
+      identification: [{ position: 30, label: 'Billing Value' }] }
+@Search.defaultSearchElement: true       
+    NetValue;
+    
+@UI.hidden: true    
+    Currency;
+    
+@UI:{ lineItem: [{ position: 40, label: 'Payer' }],
+      identification: [{ position: 40, label: 'Payer' }] }
+@Search.defaultSearchElement: true       
+    Payer;
+    
+@UI:{ lineItem: [{ position: 50, label: 'Customer Name' }],
+      identification: [{ position: 50, label: 'Customer Name' }] }
+@Search.defaultSearchElement: true  
+    Name;
+    
+@UI:{ lineItem: [{ position: 60, label: 'Country' }],
+      identification: [{ position: 60, label: 'Country' }] }
+@Search.defaultSearchElement: true  
+    Country;
+    
+}
