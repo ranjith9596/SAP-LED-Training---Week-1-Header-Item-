@@ -1,0 +1,92 @@
+CLASS lsc_zc_billing_header_14 DEFINITION INHERITING FROM cl_abap_behavior_saver.
+
+  PROTECTED SECTION.
+
+    METHODS save_modified REDEFINITION.
+
+ENDCLASS.
+
+CLASS lsc_zc_billing_header_14 IMPLEMENTATION.
+
+  METHOD save_modified.
+    DATA lt_inv_data TYPE TABLE OF zzvbrk.
+
+    IF create IS NOT INITIAL.
+
+      SELECT MAX( vbeln ) FROM zzvbrk INTO @DATA(lv_vbeln).
+      lv_vbeln = lv_vbeln + 1.
+      lv_vbeln = |{ lv_vbeln ALPHA = IN }|.
+      lt_inv_data = CORRESPONDING #( create-zc_billing_header_14 MAPPING FROM ENTITY ).
+      lt_inv_data[ 1 ]-vbeln = lv_vbeln.
+      INSERT zzvbrk FROM TABLE @lt_inv_data.
+    ENDIF.
+    IF delete IS NOT INITIAL.
+
+      lt_inv_data = CORRESPONDING #( delete-zc_billing_header_14 MAPPING FROM ENTITY ).
+      DELETE zzvbrk FROM TABLE @lt_inv_data.
+    ENDIF.
+    IF update IS NOT INITIAL.
+
+      READ ENTITIES OF zc_billing_header_14 IN LOCAL MODE
+           ENTITY zc_billing_header_14
+           ALL FIELDS WITH VALUE #( ( DocumentNumber = update-zc_billing_header_14[ 1 ]-DocumentNumber ) )
+           RESULT DATA(lt_data)
+           FAILED DATA(lt_failed).
+      IF lt_data IS NOT INITIAL.
+        lt_inv_data = CORRESPONDING #( lt_data MAPPING FROM ENTITY ).
+        MODIFY zzvbrk FROM TABLE @lt_inv_data.
+      ENDIF.
+
+    ENDIF.
+
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lhc_ZC_BILLING_HEADER_14 DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR zc_billing_header_14 RESULT result.
+
+    METHODS get_global_authorizations FOR GLOBAL AUTHORIZATION
+      IMPORTING REQUEST requested_authorizations FOR zc_billing_header_14 RESULT result.
+    METHODS checkpayer FOR VALIDATE ON SAVE
+      IMPORTING keys FOR zc_billing_header_14~checkpayer.
+
+ENDCLASS.
+
+CLASS lhc_ZC_BILLING_HEADER_14 IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD get_global_authorizations.
+  ENDMETHOD.
+
+  METHOD checkpayer.
+    READ ENTITIES OF zc_billing_header_14 IN LOCAL MODE
+         ENTITY zc_billing_header_14
+         ALL FIELDS WITH CORRESPONDING #( keys )
+         RESULT DATA(lt_result)
+         " TODO: variable is assigned but never used (ABAP cleaner)
+         FAILED DATA(lt_failed).
+
+    LOOP AT lt_result ASSIGNING FIELD-SYMBOL(<fs_result_data>).
+      IF <fs_result_data>-Payer IS INITIAL.
+        APPEND VALUE #( %tky = <fs_result_data>-%tky  ) TO failed-zc_billing_header_14.
+        APPEND VALUE #( %tky           = <fs_result_data>-%tky
+*                        %state_area    = 'CHECKPAYER' " This is to mark the field is in error
+                        %element-Payer = if_abap_behv=>mk-on " This is to highlight the errored field
+                        %msg           = new_message_with_text( " This is the method from derived class which formats the message
+                                                                severity = if_abap_behv_message=>severity-error
+                                                                text     = 'Payer is Mandratory' ) ) " Error Message
+               TO reported-zc_billing_header_14.
+      ENDIF.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+ENDCLASS.
