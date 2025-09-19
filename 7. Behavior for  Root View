@@ -1,0 +1,25 @@
+managed implementation in class zbp_c_billing_header_14 unique;
+strict ( 2 );
+
+define behavior for ZC_BILLING_HEADER_14 //alias <alias_name>
+with unmanaged save
+//persistent table zvbrk
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+
+  validation checkpayer on save { create;update; field Payer ;}
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) DocumentNumber;
+  mapping for zzvbrk
+    {
+      BillingDate    = fkdat;
+      Currency       = waerk;
+      DocumentNumber = vbeln;
+      NetValue       = netwr;
+      Payer          = kunrg;
+    }
+}
