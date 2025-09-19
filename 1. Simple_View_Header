@@ -1,0 +1,21 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Basic View for Header'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity ZIR_HEADER as select from zi_vbrk
+left outer join zi_kna1 on zi_vbrk.Payer = zi_kna1.CustomerNumber
+{
+    key zi_vbrk.DocumentNumber as DocumentNumber,
+    zi_vbrk.BillingDate as BillingDate,
+    @Semantics.amount.currencyCode: 'Currency'
+    zi_vbrk.NetValue as NetValue,
+    zi_vbrk.Currency as Currency,
+    zi_vbrk.Payer as Payer,
+    zi_kna1.Name as Name,
+    zi_kna1.Country as Country    
+}
