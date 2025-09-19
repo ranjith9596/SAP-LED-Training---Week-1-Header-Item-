@@ -1,0 +1,5 @@
+@EndUserText.label: 'Service Definition for Billing Document'
+define service ZSR_BILLING_DOCUMENT {
+  expose ZPR_BILLING_DOCUMENT      as Header;
+  expose ZPR_BILLING_DOCUMENT_ITEM as Item;
+}
